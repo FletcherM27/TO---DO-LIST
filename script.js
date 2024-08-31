@@ -188,5 +188,5 @@ adjustCompletedTasksPosition();
 document.getElementById('logoutButton').addEventListener('click', function() {
     // Here you would typically clear any user session data
     // For now, we'll just redirect to the login page
-    window.location.href = 'login.html';
+    window.location.href = 'index.html'; // Change this line
 });
