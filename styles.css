@@ -261,3 +261,19 @@ button:hover {
     z-index: 1001;
     transition: bottom 0.3s ease;
 }
+
+/* Add this to the end of the file */
+
+#logoutButton {
+    background-color: #000000; /* Changed to black */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#logoutButton:hover {
+    background-color: #333333; /* Slightly lighter black for hover effect */
+}
