@@ -213,6 +213,7 @@ renderTodos();
 adjustCompletedTasksPosition();
 
 document.getElementById('logoutButton').addEventListener('click', function() {
-    localStorage.removeItem('currentUser');
-    window.location.href = 'index.html';
+    // Here you would typically clear any user session data
+    // For now, we'll just redirect to the login page
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
 });
