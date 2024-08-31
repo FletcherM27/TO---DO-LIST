@@ -99,31 +99,29 @@ button:hover {
 }
 
 .todo-list li button {
-    background-color: transparent;
+    background-color: #f0f0f0;
     color: #666;
     border: none;
     font-size: 14px;
     cursor: pointer;
-    padding: 5px;
+    padding: 5px 10px;
     margin-left: 5px;
+    border-radius: 3px;
 }
 
 .todo-list li button:hover {
+    background-color: #e0e0e0;
     color: #333;
 }
 
 .todo-list li button.move-to-today {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 4px;
+    background-color: #f0f0f0;
+    color: #666;
 }
 
 .todo-list li button.move-to-today:hover {
-    background-color: #45a049;
+    background-color: #e0e0e0;
+    color: #333;
 }
 
 @media (max-width: 768px) {
@@ -254,16 +252,6 @@ button:hover {
     text-align: left;
 }
 
-.completed-tasks-toggle {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1001;
-    transition: bottom 0.3s ease;
-}
-
-/* Add this to the end of the file */
-
 #logoutButton {
     background-color: #000000; /* Changed to black */
     color: white;
@@ -290,4 +278,35 @@ button:hover {
 
 .delete-btn:hover {
     color: #cc0000;
+}
+
+.todo-text {
+    cursor: pointer;
+}
+
+.todo-text:hover {
+    text-decoration: underline;
+}
+
+/* Remove these styles as they're not needed for completed tasks */
+/*
+.todo-text[contenteditable="true"]:hover {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+.todo-text[contenteditable="true"]:focus {
+    background-color: #ffffff;
+    outline: 2px solid #007bff;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+*/
+
+/* Add styles for inline editing */
+.todo-text[contenteditable="true"]:focus {
+    outline: 2px solid #007bff;
+    padding: 2px 4px;
+    border-radius: 2px;
 }
