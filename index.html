@@ -39,6 +39,7 @@
             if (account) {
                 console.log("Account found:", account);
                 // Successful login
+                localStorage.setItem('currentUser', username); // Set the current user
                 alert("Login successful!");
                 setTimeout(() => {
                     window.location.href = 'quest.html'; // Redirect to the quest page
