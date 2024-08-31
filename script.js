@@ -49,7 +49,7 @@ function renderList(listId, todos) {
         const li = document.createElement('li');
         if (listId === 'masterTodoList') {
             li.innerHTML = `
-                <span>${todo.text}</span>
+                <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
                 <button onclick="toggleTodo('${listId}', ${index})">Move to Today</button>
                 <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
                 <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
@@ -57,7 +57,7 @@ function renderList(listId, todos) {
         } else {
             li.innerHTML = `
                 <input type="checkbox" onchange="toggleTodo('${listId}', ${index})">
-                <span>${todo.text}</span>
+                <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
                 <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
                 <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
             `;
@@ -213,7 +213,16 @@ renderTodos();
 adjustCompletedTasksPosition();
 
 document.getElementById('logoutButton').addEventListener('click', function() {
-    // Here you would typically clear any user session data
-    // For now, we'll just redirect to the login page
-    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
 });
+
+function updateTodo(listId, index, newText) {
+    const list = listId === 'dailyTodoList' ? dailyTodos : masterTodos;
+    if (newText.trim() !== "") {
+        list[index].text = newText.trim();
+        saveTasks();
+    } else {
+        renderTodos(); // Revert changes if the new text is empty
+    }
+}
