@@ -277,3 +277,17 @@ button:hover {
 #logoutButton:hover {
     background-color: #333333; /* Slightly lighter black for hover effect */
 }
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ff0000;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0 5px;
+    margin-left: 5px;
+}
+
+.delete-btn:hover {
+    color: #cc0000;
+}
