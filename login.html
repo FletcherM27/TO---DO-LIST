@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Quest Page</title>
+    <link rel="stylesheet" href="login-styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <form id="loginForm">
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+                    
+                <button type="submit">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+        </form>
+        <div class="signup-link">
+            <p>New member? <a href="signup.html">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var username = this.uname.value;
+            var password = this.psw.value;
+            
+            var accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            var account = accounts.find(acc => acc.username === username && acc.password === password);
+            
+            if (account) {
+                // Successful login
+                alert("Login successful!");
+                window.location.href = 'index.html'; // Redirect to the quest page
+            } else {
+                // Failed login
+                alert("Invalid username or password. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
