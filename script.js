@@ -214,7 +214,7 @@ adjustCompletedTasksPosition();
 
 document.getElementById('logoutButton').addEventListener('click', function() {
     localStorage.removeItem('currentUser');
-    window.location.href = 'index.html';
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
 });
 
 function updateTodo(listId, index, newText) {
