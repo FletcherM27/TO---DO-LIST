@@ -184,3 +184,9 @@ window.addEventListener('resize', adjustCompletedTasksPosition);
 // Call this at the end of functions that modify the lists
 renderTodos();
 adjustCompletedTasksPosition();
+
+document.getElementById('logoutButton').addEventListener('click', function() {
+    // Here you would typically clear any user session data
+    // For now, we'll just redirect to the login page
+    window.location.href = 'login.html';
+});
