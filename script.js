@@ -2,6 +2,24 @@ let dailyTodos = [];
 let masterTodos = [];
 let completedTodos = [];
 
+function saveTasks() {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+        localStorage.setItem(`${currentUser}_dailyTodos`, JSON.stringify(dailyTodos));
+        localStorage.setItem(`${currentUser}_masterTodos`, JSON.stringify(masterTodos));
+        localStorage.setItem(`${currentUser}_completedTodos`, JSON.stringify(completedTodos));
+    }
+}
+
+function loadTasks() {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+        dailyTodos = JSON.parse(localStorage.getItem(`${currentUser}_dailyTodos`)) || [];
+        masterTodos = JSON.parse(localStorage.getItem(`${currentUser}_masterTodos`)) || [];
+        completedTodos = JSON.parse(localStorage.getItem(`${currentUser}_completedTodos`)) || [];
+    }
+}
+
 function addTodo(listType) {
     const input = document.getElementById(`${listType}TodoInput`);
     const todo = input.value.trim();
@@ -13,7 +31,8 @@ function addTodo(listType) {
         }
         input.value = '';
         renderTodos();
-        adjustCompletedTasksPosition(); // Add this line
+        adjustCompletedTasksPosition();
+        saveTasks();
     }
 }
 
@@ -59,57 +78,12 @@ function toggleTodo(listId, index) {
         // Move completed task from daily list to completed list
         list.splice(index, 1);
         completedTodos.push({...todo, completedDate: new Date()});
-        renderCompletedTodos(); // Add this line
+        renderCompletedTodos();
     }
     
     renderTodos();
-    adjustCompletedTasksPosition(); // Add this line
-}
-
-function renderCompletedTodos() {
-    const list = document.getElementById('completedTodoList');
-    list.innerHTML = '';
-
-    if (completedTodos.length === 0) {
-        list.innerHTML = '<p>No completed tasks yet.</p>';
-        return;
-    }
-
-    // Group tasks by week
-    const tasksByWeek = {};
-    completedTodos.forEach((todo) => {
-        const weekNumber = getWeekNumber(todo.completedDate);
-        const yearWeek = `${todo.completedDate.getFullYear()}-W${weekNumber}`;
-        if (!tasksByWeek[yearWeek]) {
-            tasksByWeek[yearWeek] = [];
-        }
-        tasksByWeek[yearWeek].push(todo);
-    });
-
-    // Render tasks grouped by week
-    Object.keys(tasksByWeek).sort().reverse().forEach((yearWeek) => {
-        const [year, week] = yearWeek.split('-W');
-        const weekStart = new Date(year, 0, (week - 1) * 7 + 1);
-        const weekEnd = new Date(year, 0, week * 7);
-
-        const weekHeader = document.createElement('h3');
-        weekHeader.textContent = `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
-        list.appendChild(weekHeader);
-
-        const weekList = document.createElement('ul');
-        tasksByWeek[yearWeek].forEach((todo) => {
-            const li = document.createElement('li');
-            li.textContent = `${todo.text} (${formatDate(todo.completedDate)})`;
-            weekList.appendChild(li);
-        });
-        list.appendChild(weekList);
-    });
-}
-
-// Helper function to format date as "MMM D"
-function formatDate(date) {
-    const options = { month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    adjustCompletedTasksPosition();
+    saveTasks();
 }
 
 function moveTodo(listId, index, direction) {
@@ -120,7 +94,8 @@ function moveTodo(listId, index, direction) {
         [list[index], list[index + 1]] = [list[index + 1], list[index]];
     }
     renderTodos();
-    adjustCompletedTasksPosition(); // Add this line
+    adjustCompletedTasksPosition();
+    saveTasks();
 }
 
 function setCurrentDate() {
@@ -147,10 +122,11 @@ function toggleCompletedTasksVisibility() {
 document.getElementById('toggleCompletedTasks').addEventListener('click', toggleCompletedTasksVisibility);
 
 function initialRender() {
+    loadTasks();
     setCurrentDate();
     renderTodos();
     renderCompletedTodos();
-    adjustCompletedTasksPosition(); // Add this line
+    adjustCompletedTasksPosition();
 }
 
 initialRender();
@@ -161,6 +137,60 @@ function getWeekNumber(date) {
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
 }
 
+function renderCompletedTodos() {
+    const list = document.getElementById('completedTodoList');
+    list.innerHTML = '';
+
+    if (completedTodos.length === 0) {
+        list.innerHTML = '<p>No completed tasks yet.</p>';
+        return;
+    }
+
+    // Group tasks by week
+    const tasksByWeek = {};
+    completedTodos.forEach((todo, index) => {
+        const weekNumber = getWeekNumber(new Date(todo.completedDate));
+        const yearWeek = `${new Date(todo.completedDate).getFullYear()}-W${weekNumber}`;
+        if (!tasksByWeek[yearWeek]) {
+            tasksByWeek[yearWeek] = [];
+        }
+        tasksByWeek[yearWeek].push({...todo, index});
+    });
+
+    // Render tasks grouped by week
+    Object.keys(tasksByWeek).sort().reverse().forEach((yearWeek) => {
+        const [year, week] = yearWeek.split('-W');
+        const weekStart = new Date(year, 0, (week - 1) * 7 + 1);
+        const weekEnd = new Date(year, 0, week * 7);
+
+        const weekHeader = document.createElement('h3');
+        weekHeader.textContent = `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
+        list.appendChild(weekHeader);
+
+        const weekList = document.createElement('ul');
+        tasksByWeek[yearWeek].forEach((todo) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${todo.text} (${formatDate(new Date(todo.completedDate))})
+                <button onclick="deleteCompletedTodo(${todo.index})" class="delete-btn">✕</button>
+            `;
+            weekList.appendChild(li);
+        });
+        list.appendChild(weekList);
+    });
+}
+
+function deleteCompletedTodo(index) {
+    completedTodos.splice(index, 1);
+    renderCompletedTodos();
+    saveTasks();
+}
+
+function formatDate(date) {
+    const options = { month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
 function adjustCompletedTasksPosition() {
     const container = document.querySelector('.container');
     const completedTasksContainer = document.getElementById('completedTasksContainer');
@@ -169,10 +199,8 @@ function adjustCompletedTasksPosition() {
     const containerRect = container.getBoundingClientRect();
     const containerBottom = containerRect.bottom + window.pageYOffset;
     
-    // Position the button first
     toggleButton.style.top = `${containerBottom + 20}px`;
     
-    // Then position the completed tasks container below the button
     const toggleButtonRect = toggleButton.getBoundingClientRect();
     const toggleButtonBottom = toggleButtonRect.bottom + window.pageYOffset;
     
@@ -181,12 +209,10 @@ function adjustCompletedTasksPosition() {
 
 window.addEventListener('resize', adjustCompletedTasksPosition);
 
-// Call this at the end of functions that modify the lists
 renderTodos();
 adjustCompletedTasksPosition();
 
 document.getElementById('logoutButton').addEventListener('click', function() {
-    // Here you would typically clear any user session data
-    // For now, we'll just redirect to the login page
-    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
 });
