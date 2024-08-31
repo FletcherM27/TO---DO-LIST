@@ -37,10 +37,14 @@
             var account = accounts.find(acc => acc.username === username && acc.password === password);
             
             if (account) {
+                console.log("Account found:", account);
                 // Successful login
                 alert("Login successful!");
-                window.location.href = 'index.html'; // Redirect to the quest page
+                setTimeout(() => {
+                    window.location.href = 'quest.html'; // Redirect to the quest page
+                }, 100);
             } else {
+                console.log("No matching account found");
                 // Failed login
                 alert("Invalid username or password. Please try again.");
             }
