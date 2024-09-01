@@ -2,22 +2,30 @@ let dailyTodos = [];
 let masterTodos = [];
 let completedTodos = [];
 
-function saveTasks() {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-        localStorage.setItem(`${currentUser}_dailyTodos`, JSON.stringify(dailyTodos));
-        localStorage.setItem(`${currentUser}_masterTodos`, JSON.stringify(masterTodos));
-        localStorage.setItem(`${currentUser}_completedTodos`, JSON.stringify(completedTodos));
+function saveAllData() {
+    const allData = {
+        dailyTodos,
+        masterTodos,
+        completedTodos
+    };
+    localStorage.setItem('questPageData', JSON.stringify(allData));
+}
+
+function loadAllData() {
+    const data = JSON.parse(localStorage.getItem('questPageData'));
+    if (data) {
+        dailyTodos = data.dailyTodos || [];
+        masterTodos = data.masterTodos || [];
+        completedTodos = data.completedTodos || [];
     }
 }
 
+function saveTasks() {
+    saveAllData();
+}
+
 function loadTasks() {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-        dailyTodos = JSON.parse(localStorage.getItem(`${currentUser}_dailyTodos`)) || [];
-        masterTodos = JSON.parse(localStorage.getItem(`${currentUser}_masterTodos`)) || [];
-        completedTodos = JSON.parse(localStorage.getItem(`${currentUser}_completedTodos`)) || [];
-    }
+    loadAllData();
 }
 
 function addTodo(listType) {
@@ -44,36 +52,21 @@ function renderTodos() {
 
 function renderList(listId, todos) {
     const list = document.getElementById(listId);
-    list.innerHTML = '';
+    const fragment = document.createDocumentFragment();
     todos.forEach((todo, index) => {
         const li = document.createElement('li');
-        if (listId === 'masterTodoList') {
-            li.innerHTML = `
-                <div class="todo-content">
-                    <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
-                </div>
-                <div class="todo-actions">
-                    <button onclick="toggleTodo('${listId}', ${index})">Move to Today</button>
-                    <button onclick="addToWill('${listId}', ${index})" class="will-btn">W</button>
-                    <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
-                    <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
-                </div>
-            `;
-        } else {
-            li.innerHTML = `
-                <input type="checkbox" onchange="toggleTodo('${listId}', ${index})" ${todo.completed ? 'checked' : ''}>
-                <div class="todo-content">
-                    <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
-                </div>
-                <div class="todo-actions">
-                    <button onclick="addToWill('${listId}', ${index})" class="will-btn">W</button>
-                    <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
-                    <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
-                </div>
-            `;
-        }
-        list.appendChild(li);
+        li.innerHTML = `
+            <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo('${listId}', ${index})">
+            <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
+            <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
+            <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
+            ${listId === 'masterTodoList' ? `<button onclick="toggleTodo('${listId}', ${index})">Move to Today</button>` : ''}
+            <button onclick="addToWill('${listId}', ${index})" class="will-btn">W</button>
+        `;
+        fragment.appendChild(li);
     });
+    list.innerHTML = '';
+    list.appendChild(fragment);
 }
 
 function toggleTodo(listId, index) {
@@ -238,7 +231,7 @@ function updateTodo(listId, index, newText) {
         list[index].text = newText.trim();
         saveTasks();
     } else {
-        renderTodos(); // Revert changes if the new text is empty
+        renderList(listId, list);
     }
 }
 
@@ -266,3 +259,17 @@ document.getElementById('plannerButton').addEventListener('click', function() {
 document.getElementById('theWillButton').addEventListener('click', function() {
     window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/the-will.html';
 });
+
+function archiveOldTasks() {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const activeCompleted = completedTodos.filter(todo => new Date(todo.completedDate) > thirtyDaysAgo);
+    const archivedCompleted = completedTodos.filter(todo => new Date(todo.completedDate) <= thirtyDaysAgo);
+    
+    completedTodos = activeCompleted;
+    localStorage.setItem('archivedTasks', JSON.stringify(archivedCompleted));
+    saveAllData();
+}
+
+setInterval(archiveOldTasks, 24 * 60 * 60 * 1000);
