@@ -261,3 +261,13 @@ document.getElementById('plannerButton').addEventListener('click', function() {
 
 <button id="plannerButton">Planner</button>
 <button id="theWillButton">The Will</button>
+
+function checkStorageSize() {
+    var total = 0;
+    for (var x in localStorage) {
+        var amount = (localStorage[x].length * 2) / 1024 / 1024;
+        total += amount;
+    }
+    console.log("Total space used: " + total.toFixed(2) + " MB");
+    return total;
+}
