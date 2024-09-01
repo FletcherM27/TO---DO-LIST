@@ -78,20 +78,42 @@ button:hover {
 }
 
 .todo-list li {
+    display: flex;
+    align-items: center;
     background-color: #f9f9f9;
     border-radius: 4px;
     padding: 10px;
     margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.todo-list li:hover {
-    background-color: #f0f0f0;
 }
 
 .todo-list li input[type="checkbox"] {
     margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.todo-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.todo-text {
+    flex-grow: 1;
+    word-break: break-word;
+}
+
+.todo-actions {
+    display: flex;
+    align-items: center;
+}
+
+.todo-actions button {
+    margin-left: 5px;
+}
+
+.todo-list li:hover {
+    background-color: #f0f0f0;
 }
 
 .todo-list li span {
@@ -309,4 +331,45 @@ button:hover {
     outline: 2px solid #007bff;
     padding: 2px 4px;
     border-radius: 2px;
+}
+
+/* Add this to your existing styles */
+.header-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.header-buttons button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.header-buttons button:hover {
+    background-color: #333333;
+}
+
+.will-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 2px 2px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.will-btn:hover {
+    background-color: #45a049;
 }
