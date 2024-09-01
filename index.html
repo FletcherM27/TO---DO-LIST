@@ -25,33 +25,42 @@
         <div class="signup-link">
             <p>New member? <a href="signup.html">Sign up here</a></p>
         </div>
+        <button id="clearStorageBtn">Clear Local Storage</button>
     </div>
 
     <script>
+        // Clear any existing login
+        localStorage.removeItem('currentUser');
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             var username = this.uname.value;
             var password = this.psw.value;
             
-            console.log("Login attempt:", username, password);
+            console.log("Login attempt:", username);
             
             var accounts = JSON.parse(localStorage.getItem('accounts')) || [];
             console.log("Stored accounts:", accounts);
             
             var account = accounts.find(acc => acc.username === username && acc.password === password);
+            console.log("Found account:", account);
             
             if (account) {
-                console.log("Account found:", account);
+                console.log("Setting currentUser:", username);
                 localStorage.setItem('currentUser', username);
-                // recordLogin(); // Comment this out if it's not defined
+                console.log("CurrentUser set:", localStorage.getItem('currentUser'));
                 alert("Login successful!");
-                setTimeout(() => {
-                    window.location.href = 'quest.html';
-                }, 100);
+                console.log("Redirecting to quest.html");
+                window.location.href = 'quest.html';
             } else {
                 console.log("No matching account found");
                 alert("Invalid username or password. Please try again.");
             }
+        });
+
+        document.getElementById('clearStorageBtn').addEventListener('click', function() {
+            localStorage.clear();
+            alert('Local storage has been cleared. You may need to refresh the page or sign up again.');
         });
     </script>
 </body>
