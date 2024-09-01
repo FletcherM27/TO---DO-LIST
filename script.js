@@ -49,17 +49,27 @@ function renderList(listId, todos) {
         const li = document.createElement('li');
         if (listId === 'masterTodoList') {
             li.innerHTML = `
-                <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
-                <button onclick="toggleTodo('${listId}', ${index})">Move to Today</button>
-                <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
-                <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
+                <div class="todo-content">
+                    <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
+                </div>
+                <div class="todo-actions">
+                    <button onclick="toggleTodo('${listId}', ${index})">Move to Today</button>
+                    <button onclick="addToWill('${listId}', ${index})" class="will-btn">W</button>
+                    <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
+                    <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
+                </div>
             `;
         } else {
             li.innerHTML = `
-                <input type="checkbox" onchange="toggleTodo('${listId}', ${index})">
-                <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
-                <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
-                <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
+                <input type="checkbox" onchange="toggleTodo('${listId}', ${index})" ${todo.completed ? 'checked' : ''}>
+                <div class="todo-content">
+                    <span class="todo-text" contenteditable="true" onblur="updateTodo('${listId}', ${index}, this.textContent)">${todo.text}</span>
+                </div>
+                <div class="todo-actions">
+                    <button onclick="addToWill('${listId}', ${index})" class="will-btn">W</button>
+                    <button onclick="moveTodo('${listId}', ${index}, 'up')">▲</button>
+                    <button onclick="moveTodo('${listId}', ${index}, 'down')">▼</button>
+                </div>
             `;
         }
         list.appendChild(li);
@@ -131,10 +141,11 @@ function initialRender() {
 
 initialRender();
 
-function getWeekNumber(date) {
-    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-    const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
 }
 
 function renderCompletedTodos() {
@@ -149,8 +160,9 @@ function renderCompletedTodos() {
     // Group tasks by week
     const tasksByWeek = {};
     completedTodos.forEach((todo, index) => {
-        const weekNumber = getWeekNumber(new Date(todo.completedDate));
-        const yearWeek = `${new Date(todo.completedDate).getFullYear()}-W${weekNumber}`;
+        const completedDate = new Date(todo.completedDate);
+        const weekNumber = getWeekNumber(completedDate);
+        const yearWeek = `${completedDate.getFullYear()}-W${weekNumber}`;
         if (!tasksByWeek[yearWeek]) {
             tasksByWeek[yearWeek] = [];
         }
@@ -160,8 +172,11 @@ function renderCompletedTodos() {
     // Render tasks grouped by week
     Object.keys(tasksByWeek).sort().reverse().forEach((yearWeek) => {
         const [year, week] = yearWeek.split('-W');
-        const weekStart = new Date(year, 0, (week - 1) * 7 + 1);
-        const weekEnd = new Date(year, 0, week * 7);
+        const firstDayOfYear = new Date(parseInt(year), 0, 1);
+        const weekStart = new Date(firstDayOfYear.getTime() + (week - 1) * 7 * 24 * 60 * 60 * 1000);
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1); // Adjust to Monday
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekEnd.getDate() + 6); // Sunday
 
         const weekHeader = document.createElement('h3');
         weekHeader.textContent = `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
@@ -214,7 +229,7 @@ adjustCompletedTasksPosition();
 
 document.getElementById('logoutButton').addEventListener('click', function() {
     localStorage.removeItem('currentUser');
-    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
+    window.location.href = 'index.html';
 });
 
 function updateTodo(listId, index, newText) {
@@ -226,3 +241,20 @@ function updateTodo(listId, index, newText) {
         renderTodos(); // Revert changes if the new text is empty
     }
 }
+
+document.getElementById('theWillButton').addEventListener('click', function() {
+    window.location.href = 'the-will.html';
+});
+
+function addToWill(listId, index) {
+    const list = listId === 'dailyTodoList' ? dailyTodos : masterTodos;
+    const task = list[index];
+    let willPromises = JSON.parse(localStorage.getItem('promises')) || [];
+    willPromises.push({ text: task.text, completed: false, status: 'pending' });
+    localStorage.setItem('promises', JSON.stringify(willPromises));
+    alert('Task added to Promises Made in The Will');
+}
+
+document.getElementById('plannerButton').addEventListener('click', function() {
+    window.location.href = 'planner.html';
+});
