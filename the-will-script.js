@@ -231,7 +231,7 @@ function initialRender() {
 }
 
 document.getElementById('backButton').addEventListener('click', function() {
-    window.location.href = 'quest.html';
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/quest.html';
 });
 
 document.getElementById('toggleRecord').addEventListener('click', toggleRecordVisibility);
