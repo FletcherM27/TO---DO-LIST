@@ -13,7 +13,7 @@
         <div class="header-buttons">
             <button id="plannerButton">Planner</button>
             <button id="theWillButton">The Will</button>
-            <button id="logoutButton">Logout</button>
+            <button id="logoutButton" onclick="logout()">Logout</button>
         </div>
     </header>
     <div class="container">
@@ -48,5 +48,17 @@
         <ul id="completedTodoList" class="todo-list"></ul>
     </div>
     <script src="script.js"></script>
+    <script>
+        // Check if user is logged in
+        if (!localStorage.getItem('currentUser')) {
+            // If no user is logged in, redirect to login page
+            window.location.href = 'index.html';
+        }
+        
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
