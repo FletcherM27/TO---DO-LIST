@@ -229,7 +229,7 @@ adjustCompletedTasksPosition();
 
 document.getElementById('logoutButton').addEventListener('click', function() {
     localStorage.removeItem('currentUser');
-    window.location.href = 'index.html';
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
 });
 
 function updateTodo(listId, index, newText) {
@@ -243,7 +243,7 @@ function updateTodo(listId, index, newText) {
 }
 
 document.getElementById('theWillButton').addEventListener('click', function() {
-    window.location.href = 'the-will.html';
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
 });
 
 function addToWill(listId, index) {
@@ -256,5 +256,5 @@ function addToWill(listId, index) {
 }
 
 document.getElementById('plannerButton').addEventListener('click', function() {
-    window.location.href = 'planner.html';
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
 });
