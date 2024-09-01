@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/43be0d5edb.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header style="text-align: center;">
+        <h1>Quest Page</h1>
+        <div class="header-buttons">
+            <button id="plannerButton">Planner</button>
+            <button id="theWillButton">The Will</button>
+            <button id="logoutButton">Logout</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="list-container">
+            <header class="list-header">
+                <h2 id="currentDate"></h2>
+            </header>
+            <div class="input-container">
+                <input type="text" id="dailyTodoInput" placeholder="Add task here">
+                <button onclick="addTodo('daily')"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="dailyTodoList" class="todo-list"></ul>
+        </div>
+        <div class="list-container">
+            <header class="list-header">
+                <h2>Master List</h2>
+            </header>
+            <div class="input-container">
+                <input type="text" id="masterTodoInput" placeholder="Add task here">
+                <button onclick="addTodo('master')"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="masterTodoList" class="todo-list"></ul>
+        </div>
+    </div>
+    <div class="completed-tasks-toggle">
+        <button id="toggleCompletedTasks">Show Completed Tasks</button>
+    </div>
+    <div id="completedTasksContainer" class="list-container" style="display: none;">
+        <header class="list-header">
+            <h2>Completed Tasks</h2>
+        </header>
+        <ul id="completedTodoList" class="todo-list"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

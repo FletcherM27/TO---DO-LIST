@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Will</title>
+    <link rel="stylesheet" href="the-will-styles.css">
+    <script src="https://kit.fontawesome.com/43be0d5edb.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header style="text-align: center;">
+        <h1>The Will</h1>
+        <div class="header-buttons">
+            <button id="backButton">Back to Quest Page</button>
+        </div>
+    </header>
+    <div class="subheader">
+        <h2>All that is written, must be done.</h2>
+    </div>
+    <div class="container">
+        <div class="list-container">
+            <header class="list-header">
+                <h2>Promises Made</h2>
+            </header>
+            <div class="input-container">
+                <input type="text" id="promiseInput" placeholder="Add a promise here">
+                <button onclick="addPromise()"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="promiseList" class="todo-list"></ul>
+        </div>
+    </div>
+    <div class="record-toggle">
+        <button id="toggleRecord">Show Record</button>
+    </div>
+    <div id="recordContainer" class="list-container" style="display: none;">
+        <header class="list-header">
+            <h2>Record</h2>
+        </header>
+        <ul id="recordList" class="todo-list"></ul>
+    </div>
+    <script src="the-will-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Quest Page</title>
+    <link rel="stylesheet" href="login-styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <form id="loginForm">
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+                    
+                <button type="submit">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+        </form>
+        <div class="signup-link">
+            <p>New member? <a href="signup.html">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var username = this.uname.value;
+            var password = this.psw.value;
+            
+            console.log("Login attempt:", username, password);
+            
+            var accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+            console.log("Stored accounts:", accounts);
+            
+            var account = accounts.find(acc => acc.username === username && acc.password === password);
+            
+            if (account) {
+                console.log("Account found:", account);
+                localStorage.setItem('currentUser', username);
+                // recordLogin(); // Comment this out if it's not defined
+                alert("Login successful!");
+                setTimeout(() => {
+                    window.location.href = 'quest.html';
+                }, 100);
+            } else {
+                console.log("No matching account found");
+                alert("Invalid username or password. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
