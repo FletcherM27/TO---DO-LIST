@@ -2,6 +2,31 @@ let dailyTodos = [];
 let masterTodos = [];
 let completedTodos = [];
 
+console.log("script.js loaded");
+
+window.onerror = function(message, source, lineno, colno, error) {
+    console.log("Error occurred: " + message);
+    return true;
+};
+
+function checkStorageSize() {
+    var total = 0;
+    for (var x in localStorage) {
+        if (localStorage.hasOwnProperty(x)) {
+            var amount = (localStorage[x].length * 2) / 1024 / 1024;
+            total += amount;
+        }
+    }
+    console.log("Total space used: " + total.toFixed(2) + " MB");
+    return total;
+}
+
+window.onload = function() {
+    console.log("Window loaded");
+    checkStorageSize();
+    initialRender();
+};
+
 function saveTasks() {
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
@@ -132,13 +157,16 @@ function toggleCompletedTasksVisibility() {
 document.getElementById('toggleCompletedTasks').addEventListener('click', toggleCompletedTasksVisibility);
 
 function initialRender() {
+    console.log("Initial render started");
     loadTasks();
     setCurrentDate();
     renderTodos();
     renderCompletedTodos();
     adjustCompletedTasksPosition();
+    console.log("Initial render completed");
 }
 
+console.log("Current user:", localStorage.getItem('currentUser'));
 initialRender();
 
 function getWeekNumber(d) {
@@ -261,13 +289,3 @@ document.getElementById('plannerButton').addEventListener('click', function() {
 
 <button id="plannerButton">Planner</button>
 <button id="theWillButton">The Will</button>
-
-function checkStorageSize() {
-    var total = 0;
-    for (var x in localStorage) {
-        var amount = (localStorage[x].length * 2) / 1024 / 1024;
-        total += amount;
-    }
-    console.log("Total space used: " + total.toFixed(2) + " MB");
-    return total;
-}
