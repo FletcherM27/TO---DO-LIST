@@ -243,7 +243,7 @@ function updateTodo(listId, index, newText) {
 }
 
 document.getElementById('theWillButton').addEventListener('click', function() {
-    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/the-will.html';
 });
 
 function addToWill(listId, index) {
@@ -256,5 +256,5 @@ function addToWill(listId, index) {
 }
 
 document.getElementById('plannerButton').addEventListener('click', function() {
-    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/';
+    window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/planner.html';
 });
