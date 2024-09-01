@@ -3,20 +3,26 @@ let masterTodos = [];
 let completedTodos = [];
 
 function saveAllData() {
+    const currentUser = localStorage.getItem('currentUser');
     const allData = {
         dailyTodos,
         masterTodos,
         completedTodos
     };
-    localStorage.setItem('questPageData', JSON.stringify(allData));
+    localStorage.setItem(`questPageData_${currentUser}`, JSON.stringify(allData));
 }
 
 function loadAllData() {
-    const data = JSON.parse(localStorage.getItem('questPageData'));
+    const currentUser = localStorage.getItem('currentUser');
+    const data = JSON.parse(localStorage.getItem(`questPageData_${currentUser}`));
     if (data) {
         dailyTodos = data.dailyTodos || [];
         masterTodos = data.masterTodos || [];
         completedTodos = data.completedTodos || [];
+    } else {
+        dailyTodos = [];
+        masterTodos = [];
+        completedTodos = [];
     }
 }
 
@@ -125,6 +131,7 @@ function toggleCompletedTasksVisibility() {
 document.getElementById('toggleCompletedTasks').addEventListener('click', toggleCompletedTasksVisibility);
 
 function initialRender() {
+    checkLoggedIn();
     loadTasks();
     setCurrentDate();
     renderTodos();
@@ -222,6 +229,9 @@ adjustCompletedTasksPosition();
 
 document.getElementById('logoutButton').addEventListener('click', function() {
     localStorage.removeItem('currentUser');
+    dailyTodos = [];
+    masterTodos = [];
+    completedTodos = [];
     window.location.href = 'index.html';
 });
 
@@ -273,3 +283,10 @@ function archiveOldTasks() {
 }
 
 setInterval(archiveOldTasks, 24 * 60 * 60 * 1000);
+
+function checkLoggedIn() {
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) {
+        window.location.href = 'index.html';
+    }
+}
