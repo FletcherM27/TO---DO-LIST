@@ -258,3 +258,6 @@ function addToWill(listId, index) {
 document.getElementById('plannerButton').addEventListener('click', function() {
     window.location.href = 'https://fletcherm27.github.io/TO---DO-LIST/planner.html';
 });
+
+<button id="plannerButton">Planner</button>
+<button id="theWillButton">The Will</button>
