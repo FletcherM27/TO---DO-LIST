@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner</title>
+    <link rel="stylesheet" href="planner-styles.css">
+    <script src="https://kit.fontawesome.com/43be0d5edb.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header style="text-align: center;">
+        <h1>Planner</h1>
+        <div class="header-buttons">
+            <button id="backButton">Back to Quest Page</button>
+        </div>
+    </header>
+    <div class="container">
+        <div class="list-container">
+            <header class="list-header">
+                <h2>Goals for the Week</h2>
+            </header>
+            <div class="input-container">
+                <input type="text" id="weeklyGoalInput" placeholder="Add weekly goal here">
+                <button onclick="addGoal('weekly')"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="weeklyGoalList" class="todo-list"></ul>
+        </div>
+        <div class="list-container">
+            <header class="list-header">
+                <h2>Goals for the Month</h2>
+            </header>
+            <div class="input-container">
+                <input type="text" id="monthlyGoalInput" placeholder="Add monthly goal here">
+                <button onclick="addGoal('monthly')"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="monthlyGoalList" class="todo-list"></ul>
+        </div>
+        <div class="list-container">
+            <header class="list-header">
+                <h2>Goals for the Quarter</h2>
+            </header>
+            <div class="input-container">
+                <input type="text" id="quarterlyGoalInput" placeholder="Add quarterly goal here">
+                <button onclick="addGoal('quarterly')"><i class="fas fa-plus"></i></button>
+            </div>
+            <ul id="quarterlyGoalList" class="todo-list"></ul>
+        </div>
+    </div>
+    <div class="completed-goals-toggle">
+        <button id="toggleCompletedGoals">Show Completed Goals</button>
+    </div>
+    <div id="completedGoalsContainer" class="list-container" style="display: none;">
+        <header class="list-header">
+            <h2>Completed Goals</h2>
+        </header>
+        <ul id="completedGoalList" class="todo-list"></ul>
+    </div>
+    <script src="planner-script.js"></script>
+</body>
+</html>
